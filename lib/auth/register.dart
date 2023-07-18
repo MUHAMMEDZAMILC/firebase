@@ -69,7 +69,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       'id':value.user!.uid,
                       'name':nameController.text,
                       'email':emailController.text,
-                      'pass':passController.text
+                      'pass':passController.text,
+                      'status':1,
                     });
                   });
                 }
