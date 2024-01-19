@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -18,7 +17,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: Form(
@@ -27,7 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              SizedBox(height: 200,),
+              const SizedBox(height: 200,),
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 controller:nameController ,
@@ -35,6 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   if (value!.isEmpty) {
                     return 'name is null';
                   }
+                  return null;
                 },
                 decoration: const InputDecoration(
                   hintText: 'Name'
@@ -47,6 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   if (value!.isEmpty) {
                     return 'email is null';
                   }
+                  return null;
                 },
                 decoration: const InputDecoration(
                   hintText: 'Email'
@@ -58,10 +59,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   if (value!.length<6) {
                     return 'Password atleast 6 character';
                   }
+                  return null;
                 },
                 decoration: const InputDecoration(hintText: 'Password'),
               ),
-              SizedBox(height: 50,),
+              const SizedBox(height: 50,),
               ElevatedButton(onPressed: (){
                 if (formkey.currentState!.validate()) {
                   FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text.trim(), password: passController.text.trim()).then((value){

@@ -1,7 +1,10 @@
 import 'package:firebase/auth/login.dart';
 import 'package:firebase/auth/register.dart';
+import 'package:firebase/firebase%20search/searchinghomepage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -9,7 +12,9 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
+  if (kDebugMode) {
+    print("Handling a background message: ${message.messageId}");
+  }
   // FlutterLocalNotificationsPlugin fltNotification;
 }
 
@@ -20,7 +25,9 @@ void main() {
 }
 Future<void> initializeDefault() async {
     FirebaseApp app = await Firebase.initializeApp();
-    print('Initialized default app $app');
+    if (kDebugMode) {
+      print('Initialized default app $app');
+    }
   }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -35,13 +42,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyHomePage(),
+      home: const                       MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-   MyHomePage({super.key,});
+   const MyHomePage({super.key,});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -58,7 +65,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
     late final FirebaseMessaging _messaging;
 
   @override
@@ -74,7 +80,6 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
     });
   }
 
@@ -94,6 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
+        // ignore: prefer_const_constructors
         title: Text('Firebase'),
       ),
       body: Center(
@@ -125,9 +131,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        onPressed: (){
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => const SearchingHome(),));
+        },
+        tooltip: 'Searching',
+        child: const Icon(Icons.search),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
@@ -140,7 +148,6 @@ class _MyHomePageState extends State<MyHomePage> {
       provisional: false,
       sound: true,
     );
-    String? token = await _messaging.getToken();
     
     if(settings.authorizationStatus == AuthorizationStatus.authorized){
        FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -172,7 +179,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
-      var data = message.data;
       
       // AndroidNotification? android = message.notification?.android;
       if (notification != null) {

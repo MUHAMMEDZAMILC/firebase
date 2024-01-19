@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -38,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (value!.isEmpty) {
                     return 'email is not valid';
                   }
+                  return null;
                 },
                 decoration:const InputDecoration(
                   hintText: 'email'
@@ -50,12 +50,13 @@ class _LoginPageState extends State<LoginPage> {
                   if (value!.isEmpty || value.length<6) {
                     return 'password not valid';
                   }
+                  return null;
                 },
                 decoration :const InputDecoration(
                   hintText: 'password'
                 ),
               ),
-              SizedBox(height: 40,),
+              const SizedBox(height: 40,),
                 ElevatedButton(onPressed: (){
                   if (loginkey.currentState!.validate()) {
                     FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -64,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Homepage(name: value.data()!['name'],)));
                       }));
                   }
-                }, child: Text('Login'))
+                }, child: const Text('Login'))
             ],
           )),
         ),
